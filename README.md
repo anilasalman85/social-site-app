@@ -21,7 +21,10 @@ A **MERN (MongoDB, Express, React, Node.js)** application that allows users to s
 
 
 ---
-
+## ENV Credentials for testing
+- PORT=5000
+- MONGO_URI=mongodb+srv://social_app:social123@cluster0.zqkt1lo.mongodb.net/appdb?appName=Cluster0
+- JWT_SECRET=supersecretkey123
 ## Pre-Created Test User
 
 | Email             | Password |
