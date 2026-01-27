@@ -1,4 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "./context/AuthContext";
+
 import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard";
 import CreatePost from "./pages/CreatePost";
@@ -8,35 +11,39 @@ import Register from "./pages/Register";
 import PostForm from "./components/PostForm";
 
 function App() {
-  const token = localStorage.getItem("token");
+  const auth = useContext(AuthContext);
+
+  if (!auth) return null; // safety
+
+  const { token } = auth;
 
   return (
     <Router>
-      {/* Only show navbar when user is logged in */}
       {token && <Navbar />}
 
       <Routes>
+        {/* Public */}
+        <Route
+          path="/login"
+          element={token ? <Navigate to="/dashboard" /> : <Login />}
+        />
+        <Route
+          path="/register"
+          element={token ? <Navigate to="/dashboard" /> : <Register />}
+        />
 
-        {/* Public Routes */}
-        <Route path="/login" element={token ? <Navigate to="/dashboard" /> : <Login />} />
-        <Route path="/register" element={token ? <Navigate to="/dashboard" /> : <Register />} />
-
-        {/* Protected Routes */}
+        {/* Protected */}
         {token ? (
           <>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/create" element={<CreatePost />} />
             <Route path="/posts" element={<Posts />} />
             <Route path="/posts/edit/:id" element={<PostForm />} />
-
-            {/* Default when logged in */}
             <Route path="*" element={<Navigate to="/dashboard" />} />
           </>
         ) : (
-          /* Default when not logged in */
           <Route path="*" element={<Navigate to="/login" />} />
         )}
-
       </Routes>
     </Router>
   );
