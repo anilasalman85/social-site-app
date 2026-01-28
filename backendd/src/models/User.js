@@ -6,11 +6,10 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
 }, { timestamps: true });
 
-// Correctly use function (not arrow) for methods
+
 userSchema.methods.matchPassword = async function (enteredPassword) {
   const result = await bcrypt.compare(enteredPassword, this.password);
-  console.log("Password match result:", result); // For debugging
-  return result;
+  console.log("Password match result:", result); 
 };
 
 export const User = mongoose.model("User", userSchema);
